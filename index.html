@@ -109,7 +109,7 @@
             $(".test-active").show();
             var wordList = $("#list").val();
             if(!wordList) return;
-            $("#word-test").html();
+            $("#word-test").html("");
             var words = wordList.split("\n");
             var counter = 1;
             words.forEach(function(word){
