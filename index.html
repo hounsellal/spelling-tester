@@ -5,12 +5,13 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap 101 Template</title>
+    <title>Spelling Tester</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/basic.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -22,215 +23,196 @@
   </head>
   <body class="plain">
     <div id="container">
-     <title>Spelling Tester</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
-<div class="container">
-
-  <h1>Spelling Test</h1>
-  
-  <div class="form-group storage-available">
-    <label for="existing-lists">Load List</label>
-    <select class="form-control" id="existing-lists" onChange="loadList()">
-      <option value=""></option>
-    </select>
-  </div>
-
-  <div class="form-group">
-      <label for="list">Word List</label>
-      <textarea rows="14" id="list" class="form-control"></textarea>
-  </div>
-
-  <div class="form-group form-inline">
-    <button class="btn btn-primary" onClick="buildList()">Build List</button>
-    <div style="float:right;">
-      <input class="form-control ml-3 storage-available" style="margin-left:10px;" id="list-name" type="text" />
-      <button class="btn storage-available" onClick="saveList()">Save List</button>
-  	</div>
-  </div>
-  
-  <div id="word-test">
-    
-  </div>
-  
-</div>
 
 
+        <div class="container">
 
-<script type="text/javascript">
-  
-var savedLists = {};
-  
-$( document ).ready(function() {
-  if (typeof(Storage) !== "undefined") {
-    // Code for localStorage/sessionStorage.
-    var savedListJSON = localStorage.getItem("savedLists");
-    if(savedListJSON) savedLists = JSON.parse(savedListJSON);
-    for(let key in savedLists){
-      $("#existing-lists").append(`<option value="${key}">${key}</option>`);
-    }
-  } else {
-    // Sorry! No Web Storage support..
-    $(".storage-available").hide();
-  }
-});
-  
+        <h1>Spelling Test</h1>
+        
+        <div class="form-group storage-available test-inactive">
+            <label for="existing-lists">Load List</label>
+            <select class="form-control" id="existing-lists" onChange="loadList()">
+            <option value=""></option>
+            </select>
+        </div>
 
+        <div class="form-group test-inactive">
+            <label for="list">Word List</label>
+            <textarea rows="14" id="list" class="form-control"></textarea>
+        </div>
 
-function saveList(){
-  var wordList = $("#list").val();
-  var listName = $("#list-name").val();
-  savedLists[listName] = wordList;
-  localStorage.setItem("savedLists", JSON.stringify(savedLists));
-}
-  
-function loadList(){
-  var listName = $("#existing-lists").val();
-  var list = savedLists[listName];
-  $("#list").val(list);
-  buildList();
-}
-  
-var synth = window.speechSynthesis;
-
-var inputForm = document.querySelector('form');
-var inputTxt = document.querySelector('.txt');
-var voiceSelect = document.querySelector('select');
-
-var pitch = document.querySelector('#pitch');
-var pitchValue = document.querySelector('.pitch-value');
-var rate = document.querySelector('#rate');
-var rateValue = document.querySelector('.rate-value');
-
-var voices = [];
-  
-function buildList(){
-  var wordList = $("#list").val();
-  if(!wordList) return;
-  $("#word-test").html();
-  var words = wordList.split("\n");
-  var counter = 1;
-  words.forEach(function(word){
-    word = word.trim();
-    var newElement = `
-		<div class="form-group word-question" style="padding:10px;margin-vertical:auto;">
-			<label>${counter}</label>
-			<button class="btn" onClick="say('${word}');">Speak</button>
-			<input style="margin-left:10px;" type="text" data-word="${word}" />
-		</div>
-	`;
-    $("#word-test").append(newElement);
-    counter +=1;
-  });
-  $("#word-test").append(`<div class="form-group"><button class="btn btn-primary" onClick="check();">Check</button></div>`);
-}
-  
-function check(){
-  $(".word-question").each(function(){
-    var input = $(this).find('input');
-    var val = input.val();
-    var correct = input.attr('data-word');
-    if(val == correct) {
-      $(this).addClass('bg-success');
-      $(this).append(`<i class="fa fa-check-circle" style="font-size:25px;color:green;"></i>`);
-    }
-    else {
-      $(this).addClass('bg-danger');
-      $(this).append(`<i class="fa fa-times-circle" style="font-size:25px;color:red;"></i>`);
-    }
-  });
-}
-
-function populateVoiceList() {
-  voices = synth.getVoices().sort(function (a, b) {
-      const aname = a.name.toUpperCase(), bname = b.name.toUpperCase();
-      if ( aname < bname ) return -1;
-      else if ( aname == bname ) return 0;
-      else return +1;
-  });
-  var selectedIndex = voiceSelect.selectedIndex < 0 ? 0 : voiceSelect.selectedIndex;
-  voiceSelect.innerHTML = '';
-  for(i = 0; i < voices.length ; i++) {
-    var option = document.createElement('option');
-    option.textContent = voices[i].name + ' (' + voices[i].lang + ')';
-    
-    if(voices[i].default) {
-      option.textContent += ' -- DEFAULT';
-    }
-
-    option.setAttribute('data-lang', voices[i].lang);
-    option.setAttribute('data-name', voices[i].name);
-    voiceSelect.appendChild(option);
-  }
-  voiceSelect.selectedIndex = selectedIndex;
-}
-
-//populateVoiceList();
-// if (speechSynthesis.onvoiceschanged !== undefined) {
-//   speechSynthesis.onvoiceschanged = populateVoiceList;
-// }
-  
-function say(text){
-  text = "How do you spell: " + text;
-  if (synth.speaking) {
-        console.error('speechSynthesis.speaking');
-        return;
-    }
-    if (text !== '') {
-    var utterThis = new SpeechSynthesisUtterance(text);
-    utterThis.onend = function (event) {
-        console.log('SpeechSynthesisUtterance.onend');
-    }
-    utterThis.onerror = function (event) {
-        console.error('SpeechSynthesisUtterance.onerror');
-    }
-    // var selectedOption = voiceSelect.selectedOptions[0].getAttribute('data-name');
-    // for(i = 0; i < voices.length ; i++) {
-    //   if(voices[i].name === selectedOption) {
-    //     utterThis.voice = voices[i];
-    //     break;
-    //   }
-    // }
-    // utterThis.pitch = 1;
-    // utterThis.rate = 1;
-    synth.speak(utterThis);
-  }
-}
-
-function speak(){
-    
-    if (inputTxt.value !== '') {
-    	say(inputTxt.value);
-  	}
-}
-
-// inputForm.onsubmit = function(event) {
-//   event.preventDefault();
-
-//   speak();
-
-//   inputTxt.blur();
-// }
-
-// pitch.onchange = function() {
-//   pitchValue.textContent = pitch.value;
-// }
-
-// rate.onchange = function() {
-//   rateValue.textContent = rate.value;
-// }
-
-// voiceSelect.onchange = function(){
-//   speak();
-// }
-</script>
+        <div class="form-group form-inline">
+            <button class="btn btn-primary test-inactive" onClick="buildList()">Take Test</button>
+            <button class="btn btn-primary test-active" onClick="finishTest()">End Test</button>
+            <div style="float:right;" class="test-inactive">
+                <input class="form-control ml-3 storage-available" style="margin-left:10px;" id="list-name" type="text" />
+                <button class="btn storage-available" onClick="saveList()">Save List</button>
+            </div>
+        </div>
+        
+        <div id="word-test test-active">
+            
+        </div>
+        
     </div>
-   
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-   
-   
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
-    <script>Dropzone.autoDiscover = false;</script>
+
+
+
+    <script type="text/javascript">
+        
+        var savedLists = {};
+        
+        $( document ).ready(function() {
+            $(".test-active").hide();
+            if (typeof(Storage) !== "undefined") {
+                // Code for localStorage/sessionStorage.
+                var savedListJSON = localStorage.getItem("savedLists");
+                if(savedListJSON) savedLists = JSON.parse(savedListJSON);
+                for(let key in savedLists){
+                $("#existing-lists").append(`<option value="${key}">${key}</option>`);
+                }
+            } else {
+                // Sorry! No Web Storage support..
+                $(".storage-available").hide();
+            }
+        });
+
+        function saveList(){
+        var wordList = $("#list").val();
+        var listName = $("#list-name").val();
+        savedLists[listName] = wordList;
+        localStorage.setItem("savedLists", JSON.stringify(savedLists));
+        }
+        
+        function loadList(){
+        var listName = $("#existing-lists").val();
+        var list = savedLists[listName];
+        $("#list").val(list);
+        buildList();
+        }
+        
+        var synth = window.speechSynthesis;
+
+        var inputForm = document.querySelector('form');
+        var inputTxt = document.querySelector('.txt');
+        var voiceSelect = document.querySelector('select');
+
+        var pitch = document.querySelector('#pitch');
+        var pitchValue = document.querySelector('.pitch-value');
+        var rate = document.querySelector('#rate');
+        var rateValue = document.querySelector('.rate-value');
+
+        var voices = [];
+        
+        function buildList(){
+            $(".test-inactive").hide();
+            $(".test-active").show();
+            var wordList = $("#list").val();
+            if(!wordList) return;
+            $("#word-test").html();
+            var words = wordList.split("\n");
+            var counter = 1;
+            words.forEach(function(word){
+                word = word.trim();
+                var newElement = `
+                    <div class="form-group word-question" style="padding:10px;margin-vertical:auto;">
+                        <label>${counter}</label>
+                        <button class="btn" onClick="say('${word}');">Speak</button>
+                        <input style="margin-left:10px;" type="text" data-word="${word}" />
+                    </div>
+                `;
+                $("#word-test").append(newElement);
+                counter +=1;
+            });
+            $("#word-test").append(`<div class="form-group"><button class="btn btn-primary" onClick="check();">Check</button></div>`);
+        }
+
+        function finishTest(){
+            $(".test-inactive").show();
+            $(".test-active").hide();
+        }
+        
+        function check(){
+        $(".word-question").each(function(){
+            var input = $(this).find('input');
+            var val = input.val();
+            var correct = input.attr('data-word');
+            if(val == correct) {
+            $(this).addClass('bg-success');
+            $(this).append(`<i class="fa fa-check-circle" style="font-size:25px;color:green;"></i>`);
+            }
+            else {
+            $(this).addClass('bg-danger');
+            $(this).append(`<i class="fa fa-times-circle" style="font-size:25px;color:red;"></i>`);
+            }
+        });
+        }
+
+        function populateVoiceList() {
+        voices = synth.getVoices().sort(function (a, b) {
+            const aname = a.name.toUpperCase(), bname = b.name.toUpperCase();
+            if ( aname < bname ) return -1;
+            else if ( aname == bname ) return 0;
+            else return +1;
+        });
+        var selectedIndex = voiceSelect.selectedIndex < 0 ? 0 : voiceSelect.selectedIndex;
+        voiceSelect.innerHTML = '';
+        for(i = 0; i < voices.length ; i++) {
+            var option = document.createElement('option');
+            option.textContent = voices[i].name + ' (' + voices[i].lang + ')';
+            
+            if(voices[i].default) {
+            option.textContent += ' -- DEFAULT';
+            }
+
+            option.setAttribute('data-lang', voices[i].lang);
+            option.setAttribute('data-name', voices[i].name);
+            voiceSelect.appendChild(option);
+        }
+        voiceSelect.selectedIndex = selectedIndex;
+        }
+
+        //populateVoiceList();
+        // if (speechSynthesis.onvoiceschanged !== undefined) {
+        //   speechSynthesis.onvoiceschanged = populateVoiceList;
+        // }
+        
+        function say(text){
+        text = "How do you spell: " + text;
+        if (synth.speaking) {
+                console.error('speechSynthesis.speaking');
+                return;
+            }
+            if (text !== '') {
+            var utterThis = new SpeechSynthesisUtterance(text);
+            utterThis.onend = function (event) {
+                console.log('SpeechSynthesisUtterance.onend');
+            }
+            utterThis.onerror = function (event) {
+                console.error('SpeechSynthesisUtterance.onerror');
+            }
+            // var selectedOption = voiceSelect.selectedOptions[0].getAttribute('data-name');
+            // for(i = 0; i < voices.length ; i++) {
+            //   if(voices[i].name === selectedOption) {
+            //     utterThis.voice = voices[i];
+            //     break;
+            //   }
+            // }
+            // utterThis.pitch = 1;
+            // utterThis.rate = 1;
+            synth.speak(utterThis);
+        }
+        }
+
+        function speak(){
+            
+            if (inputTxt.value !== '') {
+                say(inputTxt.value);
+            }
+        }
+
+    </script>
+    </div>
     
   </body>
 </html>
