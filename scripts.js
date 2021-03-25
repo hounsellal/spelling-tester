@@ -66,7 +66,7 @@ function buildList(){
                     <button class="btn btn-default" onClick="howSpell('${word}');">Speak</button>
                 </div>
                 <div class="col-sm-10 col-xs-7 p-5 word-question form-inline">
-                    <input class="form-control" style="margin-bottom:5px;" autocorrect="off" autocapitalize="none" type="search" autocomplete="off" data-word="${word}" />
+                    <input class="form-control" style="margin-bottom:5px;font-size:16px;" autocorrect="off" autocapitalize="none" type="search" autocomplete="off" data-word="${word}" />
                 </div>
             </div>
         `;
