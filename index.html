@@ -51,10 +51,7 @@
         </div>
 
         <div class="form-group row">
-            <div class="col-12 p-3 form-inline text-right" style="padding:15px;">
-                <input class="form-control storage-available test-inactive" style="margin-bottom:10px;" id="list-name" type="text" />
-                <button class="btn btn-default storage-available test-inactive" style="margin-bottom:10px;" onClick="saveList()">Save List</button>
-            </div>
+            
         </div>
         
         <div id="word-test" class="test-active card-body">
@@ -62,12 +59,17 @@
         </div>
 
         <div class="form-group row">
-            <div class="col-xs-6">
-                <button class="btn btn-primary test-active" onClick="check();">Check</button>
+            <div class="col-xs-6" style="padding:15px;">
+                <button class="btn btn-primary test-active btn-lg"  style="width:100%;" onClick="check();">Check</button>
+                <button class="btn btn-success btn-lg test-inactive" style="width:100%;"   onClick="buildList()">Take Test</button>
             </div>
             <div class="col-xs-6 text-right">
-                <button class="btn btn-success test-inactive" onClick="buildList()">Take Test</button>
-                <button class="btn btn-danger test-active" onClick="finishTest()">End Test</button>
+                <div class="col-12 p-3 form-inline text-right" style="padding:15px;">
+                    <input class="form-control storage-available test-inactive" style="margin-bottom:10px;" id="list-name" type="text" />
+                    <button class="btn btn-default storage-available test-inactive" style="margin-bottom:10px;" onClick="saveList()">Save List</button>
+                    <button class="btn btn-danger test-active btn-lg" style="width:100%;" onClick="finishTest()" >End Test</button>
+                </div>
+                
             </div>
         </div>
         
