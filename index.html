@@ -29,11 +29,17 @@
 
         <h1>Spelling Test</h1>
         
-        <div class="form-group storage-available test-inactive">
-            <label for="existing-lists">Load List</label>
-            <select class="form-control" id="existing-lists" onChange="loadList()">
-            <option value=""></option>
-            </select>
+        <div class="form-group row storage-available test-inactive">
+            <div class="col-xs-7 col-sm-10">
+                <label for="existing-lists">Load List</label>
+                <select class="form-control" id="existing-lists" onChange="loadList()">
+                    <option value=""></option>
+                </select>
+            </div>
+            <div class="col-xs-5 col-sm-2">
+                <button class="btn btn-danger" style="margin-top:25px;" onClick="deleteList()">Delete</button>
+            </div>
+            
         </div>
 
         <div class="form-group test-inactive">
@@ -88,15 +94,29 @@
         function saveList(){
             var wordList = $("#list").val();
             var listName = $("#list-name").val();
+            if(!wordList || !listName) return;
             savedLists[listName] = wordList;
             localStorage.setItem("savedLists", JSON.stringify(savedLists));
+            $("#existing-lists").append(`<option value="${listName}">${listName}</option>`);
+            $("#existing-lists").val(listName);
         }
         
         function loadList(){
             var listName = $("#existing-lists").val();
             var list = savedLists[listName];
             $("#list").val(list);
-            buildList();
+            //buildList();
+        }
+
+        function deleteList(){
+            var listName = $("#existing-lists").val();
+            if(listName){
+                delete savedLists[listName];
+                localStorage.setItem("savedLists", JSON.stringify(savedLists));
+                $("#existing-lists").find(`option[value='${listName}']`).remove();
+                $("#existing-lists").val('');
+                $("#list").val('');
+            }
         }
         
         var synth = window.speechSynthesis;
@@ -113,10 +133,13 @@
         var voices = [];
         
         function buildList(){
+            var wordList = $("#list").val();
+            if(!wordList) {
+                alert("Please add some words to your list");
+                return;
+            }
             $(".test-inactive").hide();
             $(".test-active").show();
-            var wordList = $("#list").val();
-            if(!wordList) return;
             $("#word-test").html("");
             var words = wordList.split("\n");
             var counter = 1;
@@ -126,7 +149,7 @@
                     <div class="form-group row" style="padding:10px;margin-vertical:auto;">
                         <div class="col-sm-2 col-xs-5 p-5 text-right">
                             <label>${counter}</label>
-                            <button class="btn btn-default" onClick="say('${word}');">Speak</button>
+                            <button class="btn btn-default" onClick="howSpell('${word}');">Speak</button>
                         </div>
                         <div class="col-sm-10 col-xs-7 p-5 word-question form-inline">
                             <input class="form-control" style="margin-bottom:5px;" autocorrect="off" autocapitalize="none" type="search" autocomplete="off" data-word="${word}" />
@@ -144,85 +167,86 @@
         }
         
         function check(){
+            var incorrect = false;
             $(".word-question").each(function(){
 
                 $(this).find('i').remove();
                 var input = $(this).find('input');
-                var val = input.val();
+                var val = input.val().toLowerCase();
                 var parent = $(this).parent();
-                var correct = input.attr('data-word');
+                var correct = input.attr('data-word').toLowerCase();
                 
                 if(val == correct) {
                     parent.addClass('bg-success').removeClass("bg-danger");
                     $(this).append(`<i class="fa fa-check-circle" style="font-size:25px;color:green;"></i>`);
                 }
                 else {
+                    incorrect = true;
                     parent.addClass('bg-danger').removeClass("bg-success");
                     $(this).append(`<i class="fa fa-times-circle" style="font-size:25px;color:red;"></i>`);
                 }
             });
+            if(!incorrect) say("Yay! You got everything right!");
+            else say("Good work. Keep practicing!");
         }
 
         function populateVoiceList() {
-        voices = synth.getVoices().sort(function (a, b) {
-            const aname = a.name.toUpperCase(), bname = b.name.toUpperCase();
-            if ( aname < bname ) return -1;
-            else if ( aname == bname ) return 0;
-            else return +1;
-        });
-        var selectedIndex = voiceSelect.selectedIndex < 0 ? 0 : voiceSelect.selectedIndex;
-        voiceSelect.innerHTML = '';
-        for(i = 0; i < voices.length ; i++) {
-            var option = document.createElement('option');
-            option.textContent = voices[i].name + ' (' + voices[i].lang + ')';
-            
-            if(voices[i].default) {
-            option.textContent += ' -- DEFAULT';
-            }
+            voices = synth.getVoices().sort(function (a, b) {
+                const aname = a.name.toUpperCase(), bname = b.name.toUpperCase();
+                if ( aname < bname ) return -1;
+                else if ( aname == bname ) return 0;
+                else return +1;
+            });
+            var selectedIndex = voiceSelect.selectedIndex < 0 ? 0 : voiceSelect.selectedIndex;
+            voiceSelect.innerHTML = '';
+            for(i = 0; i < voices.length ; i++) {
+                var option = document.createElement('option');
+                option.textContent = voices[i].name + ' (' + voices[i].lang + ')';
+                
+                if(voices[i].default) {
+                    option.textContent += ' -- DEFAULT';
+                }
 
-            option.setAttribute('data-lang', voices[i].lang);
-            option.setAttribute('data-name', voices[i].name);
-            voiceSelect.appendChild(option);
-        }
-        voiceSelect.selectedIndex = selectedIndex;
+                option.setAttribute('data-lang', voices[i].lang);
+                option.setAttribute('data-name', voices[i].name);
+                voiceSelect.appendChild(option);
+            }
+            voiceSelect.selectedIndex = selectedIndex;
         }
 
         //populateVoiceList();
         // if (speechSynthesis.onvoiceschanged !== undefined) {
         //   speechSynthesis.onvoiceschanged = populateVoiceList;
         // }
+
+        function howSpell(text){
+            say("How do you spell: " + text);
+        }
         
         function say(text){
-        text = "How do you spell: " + text;
-        if (synth.speaking) {
-                console.error('speechSynthesis.speaking');
-                return;
-            }
-            if (text !== '') {
-            var utterThis = new SpeechSynthesisUtterance(text);
-            utterThis.onend = function (event) {
-                console.log('SpeechSynthesisUtterance.onend');
-            }
-            utterThis.onerror = function (event) {
-                console.error('SpeechSynthesisUtterance.onerror');
-            }
-            // var selectedOption = voiceSelect.selectedOptions[0].getAttribute('data-name');
-            // for(i = 0; i < voices.length ; i++) {
-            //   if(voices[i].name === selectedOption) {
-            //     utterThis.voice = voices[i];
-            //     break;
-            //   }
-            // }
-            // utterThis.pitch = 1;
-            // utterThis.rate = 1;
-            synth.speak(utterThis);
-        }
-        }
-
-        function speak(){
             
-            if (inputTxt.value !== '') {
-                say(inputTxt.value);
+            // if (synth.speaking) {
+            //     console.error('speechSynthesis.speaking');
+            //     return;
+            // }
+            if (text !== '') {
+                var utterThis = new SpeechSynthesisUtterance(text);
+                utterThis.onend = function (event) {
+                    console.log('SpeechSynthesisUtterance.onend');
+                }
+                utterThis.onerror = function (event) {
+                    console.error('SpeechSynthesisUtterance.onerror');
+                }
+                // var selectedOption = voiceSelect.selectedOptions[0].getAttribute('data-name');
+                // for(i = 0; i < voices.length ; i++) {
+                //   if(voices[i].name === selectedOption) {
+                //     utterThis.voice = voices[i];
+                //     break;
+                //   }
+                // }
+                // utterThis.pitch = 1;
+                // utterThis.rate = 1;
+                synth.speak(utterThis);
             }
         }
 
