@@ -110,8 +110,14 @@ function check(){
             $(this).append(`<i class="fa fa-times-circle" style="font-size:25px;color:red;"></i>`);
         }
     });
-    if(!incorrect) say("Yay! You got everything right!");
-    else say("Good work. Keep practicing!");
+    if(!incorrect) {
+        say("Yay! You got everything right!");
+        $('#winner-modal').modal();
+    }
+    else {
+        say("Good work. Keep practicing!");
+        $("#keep-trying-modal").modal();
+    }
 }
 
 function populateVoiceList() {
