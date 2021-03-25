@@ -26,79 +26,75 @@
   <body class="plain">
     <div id="container" style="max-width:100vw;">
 
-
         <div class="container">
 
-        
-        <h1><img src="liam.png" style="width:50px;" /> Liam's Spelling Tester</h1>
-        
-        <div class="form-group row storage-available test-inactive">
-            <div class="col-xs-7 col-sm-10">
-                <label for="existing-lists">Load List</label>
-                <select class="form-control" id="existing-lists" onChange="loadList()">
-                    <option value=""></option>
-                </select>
+            <h1><img src="liam.png" style="width:50px;" /> Liam's Spelling Tester</h1>
+            
+            <div class="form-group row storage-available test-inactive">
+                <div class="col-xs-7 col-sm-10">
+                    <label for="existing-lists">Load List</label>
+                    <select class="form-control" id="existing-lists" onChange="loadList()">
+                        <option value=""></option>
+                    </select>
+                </div>
+                <div class="col-xs-5 col-sm-2">
+                    <button class="btn btn-danger" style="margin-top:25px;" onClick="deleteList()">Delete</button>
+                </div>
+                
             </div>
-            <div class="col-xs-5 col-sm-2">
-                <button class="btn btn-danger" style="margin-top:25px;" onClick="deleteList()">Delete</button>
+
+            <div class="form-group test-inactive">
+                <label for="list">Word List</label>
+                <textarea rows="14" id="list" class="form-control" autocorrect="off" autocapitalize="none"></textarea>
+                <p class="help-block">Add one spelling word per line. You can save your list by naming it below and clicking Save List.</p>
+            </div>
+            
+            <div class="test-active panel panel-primary" style="margin-top:25px;display:none;">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Quiz</h3>
+                </div>
+                <div id="word-test" class="panel-body">
+
+                </div>
+                <div class="panel-footer">Press "Speak" for each question. Then type your answer.</div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-xs-6" style="padding:15px;">
+                    <button class="btn btn-primary test-active btn-lg"  style="width:100%;" onClick="check();">Check</button>
+                    <button class="btn btn-success btn-lg test-inactive" style="width:100%;"   onClick="buildList()">Take Test</button>
+                </div>
+                <div class="col-xs-6 text-right">
+                    <div class="col-12 p-3 form-inline text-right" style="padding:15px;">
+                        <input class="form-control storage-available test-inactive" style="margin-bottom:10px;" id="list-name" type="text" />
+                        <button class="btn btn-default storage-available test-inactive" style="margin-bottom:10px;" onClick="saveList()">Save List</button>
+                        <button class="btn btn-danger test-active btn-lg" style="width:100%;" onClick="finishTest()" >End Test</button>
+                    </div>
+                    
+                </div>
             </div>
             
         </div>
 
-        <div class="form-group test-inactive">
-            <label for="list">Word List</label>
-            <textarea rows="14" id="list" class="form-control" autocorrect="off" autocapitalize="none"></textarea>
-            <p class="help-block">Add one spelling word per line. You can save your list by naming it below and clicking Save List.</p>
-        </div>
-        
-        <div class="test-active panel panel-primary" style="margin-top:25px;">
-            <div class="panel-heading">
-                <h3 class="panel-title">Quiz</h3>
-            </div>
-            <div id="word-test" class="panel-body">
 
-            </div>
-            <div class="panel-footer">Press "Speak" for each question. Then type your answer.</div>
-        </div>
-
-        <div class="form-group row">
-            <div class="col-xs-6" style="padding:15px;">
-                <button class="btn btn-primary test-active btn-lg"  style="width:100%;" onClick="check();">Check</button>
-                <button class="btn btn-success btn-lg test-inactive" style="width:100%;"   onClick="buildList()">Take Test</button>
-            </div>
-            <div class="col-xs-6 text-right">
-                <div class="col-12 p-3 form-inline text-right" style="padding:15px;">
-                    <input class="form-control storage-available test-inactive" style="margin-bottom:10px;" id="list-name" type="text" />
-                    <button class="btn btn-default storage-available test-inactive" style="margin-bottom:10px;" onClick="saveList()">Save List</button>
-                    <button class="btn btn-danger test-active btn-lg" style="width:100%;" onClick="finishTest()" >End Test</button>
+        <div class="modal fade" id="winner-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="">
+                    <img src="winner.png" style="max-width:90vw;" />
                 </div>
-                
             </div>
         </div>
-        
-    </div>
 
-
-    <div class="modal fade" id="winner-modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="">
-                <img src="winner.png" style="max-width:90vw;" />
+        <div class="modal fade" id="keep-trying-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="">
+                    <img src="keep-trying.png" style="max-width:90vw;" />
+                </div>
             </div>
         </div>
     </div>
-
-    <div class="modal fade" id="keep-trying-modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="">
-                <img src="keep-trying.png" style="max-width:90vw;" />
-            </div>
-        </div>
-    </div>
-
-
 
     <script type="text/javascript" src="scripts.js"></script>
-    </div>
     
   </body>
 </html>
