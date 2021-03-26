@@ -63,10 +63,10 @@ function buildList(){
             <div class="form-group row" style="padding:10px;margin-vertical:auto;">
                 <div class="col-sm-2 col-xs-5 p-5 text-right">
                     <label>${counter}</label>
-                    <button class="btn btn-default" onClick="howSpell('${word}');">Speak</button>
+                    <button class="btn btn-default" onClick="howSpell('${word}', this);">Speak</button>
                 </div>
                 <div class="col-sm-10 col-xs-7 p-5 word-question form-inline">
-                    <input class="form-control" style="margin-bottom:5px;font-size:16px;" autocorrect="off" autocapitalize="none" type="search" autocomplete="off" data-word="${word}" />
+                    <input class="form-control" style="margin-bottom:5px;font-size:16px;" autocorrect="off" autocapitalize="none" type="search" autocomplete="off" onKeyUp="finishedAnswer(event, this);" data-word="${word}" />
                 </div>
             </div>
         `;
@@ -78,6 +78,12 @@ function buildList(){
 function finishTest(){
     $(".test-inactive").show();
     $(".test-active").hide();
+}
+
+function finishedAnswer(event){
+    if (event.keyCode === 13) {
+        $(event.target).parent().parent().next().find('button').click();
+    }
 }
 
 function check(){
@@ -110,8 +116,9 @@ function check(){
     }
 }
 
-function howSpell(text){
+function howSpell(text, thing){
     say("How do you spell: " + text);
+    $(thing).parent().parent().find("input").focus();
 }
 
 function say(text){
