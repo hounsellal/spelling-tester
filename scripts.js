@@ -127,9 +127,11 @@ function say(text){
         var utterThis = new SpeechSynthesisUtterance(text);
         utterThis.onend = function (event) {
             //console.log('SpeechSynthesisUtterance.onend');
+            synth.cancel();
         }
         utterThis.onerror = function (event) {
             console.error('SpeechSynthesisUtterance.onerror');
+            synth.cancel();
         }
 
         synth.speak(utterThis);
