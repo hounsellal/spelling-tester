@@ -59,6 +59,8 @@ function buildList(){
     var counter = 1;
     words.forEach(function(word){
         word = word.trim();
+        let semiIndex = word.indexOf(';');
+        let dataWord = semiIndex > 0 ? word.substr(0, semiIndex) : word;
         var newElement = `
             <div class="form-group row" style="padding:10px;margin-vertical:auto;">
                 <div class="col-sm-2 col-xs-5 p-5 text-right">
@@ -66,7 +68,7 @@ function buildList(){
                     <button class="btn btn-default" onClick="howSpell('${word}', this);">Speak</button>
                 </div>
                 <div class="col-sm-10 col-xs-7 p-5 word-question form-inline">
-                    <input class="form-control" style="margin-bottom:5px;font-size:16px;" autocorrect="off" autocapitalize="none" type="search" autocomplete="off" onKeyUp="finishedAnswer(event, this);" data-word="${word}" />
+                    <input class="form-control" style="margin-bottom:5px;font-size:16px;" autocorrect="off" autocapitalize="none" type="search" autocomplete="off" onKeyUp="finishedAnswer(event, this);" data-word="${dataWord}" />
                 </div>
             </div>
         `;
