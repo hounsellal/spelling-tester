@@ -28,15 +28,13 @@ function startTest(){
     var digits = parseInt($("#digits").val());
     var numbers = parseInt($("#numbers").val());
 
-    console.log(operation, digits, numbers);
-
     $(".test-inactive").hide();
     $(".test-active").show();
 
     let max = Math.pow(10, digits) - 1;
 
-    console.log(max);
-    
+    var usedNumber;
+
     for (let i = 0; i < numbers; i++) {
         let randomNumber = getRandomInt(1, max);
         var newElement = `
