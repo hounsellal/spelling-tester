@@ -84,7 +84,7 @@ function startTest(){
         }
         $("#math-test").append(newElement);
     }
-
+    $("#answer").blur();
     $("#answer").focus();
 }
 
