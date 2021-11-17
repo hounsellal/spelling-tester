@@ -43,19 +43,17 @@ function startTest(){
     $("#math-test").html('');
 
     operation = $("#operation").val();
-    var digits = parseInt($("#digits").val());
+    var max = parseInt($("#max").val());
     var numbers = parseInt($("#numbers").val());
     var firstNumber = parseInt($("#firstNumber").val());
 
     $(".test-inactive").hide();
     $(".test-active").show();
 
-    let max = Math.pow(10, digits) - 1;
-
     let numArray = [];
 
     for (let i = 0; i < numbers; i++) {
-        let randomNumber = getRandomInt(1, max);
+        let randomNumber = getRandomInt(2, max);
 
         if(operation === "Division" && i === (numbers - 1) ){
             for(let num of numArray){
@@ -148,8 +146,6 @@ function check(){
                 break;
         }
     }
-
-    console.log(answer, currentValue);
 
     if(answer !== currentValue) incorrect = true;
 
