@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Liam's Math Tester</title>
+    <title>Hounsell Math Tester</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -58,20 +58,23 @@
                       <span class="icon-bar"></span>
                       <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">Liam Learns</a>
+                    <a class="navbar-brand kid-link" data-href="/spelling-tester" href="/spelling-tester">Hounsell Learning</a>
                   </div>
               
                   <!-- Collect the nav links, forms, and other content for toggling -->
                   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                      <li ><a href="/spelling-tester">Spelling </a></li>
-                      <li class="active"><a href="/spelling-tester/math">Math <span class="sr-only">(current)</span></a></li>
+                      <li ><a class="kid-link" data-href="/spelling-tester" href="/spelling-tester">Spelling </a></li>
+                      <li class="active"><a class="kid-link" data-href="/spelling-tester/math" href="/spelling-tester/math">Math <span class="sr-only">(current)</span></a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="javascript:toggleKid()"><span class="glyphicon glyphicon-user"></span> Change Kid</a></li>
                     </ul>
                     </div>
                 </div>
             </nav>
 
-            <h1><img src="/spelling-tester/liam.png" style="width:50px;" /> Liam's Math Tester</h1>
+            <h1><img class="kid-image" data-src="/spelling-tester/kid.png" src="/spelling-tester/liam.png" style="width:50px;" /> <span class="kid-name">Liam</span>'s Math Tester</h1>
             
             <div class="form-group test-inactive">
                 <label for="operation">Operation</label>
@@ -153,13 +156,14 @@
         <div class="modal fade" id="keep-trying-modal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="">
-                    <img src="/spelling-tester/keep-trying.png" style="max-width:90vw;" />
+                    <img class="kid-image" data-src="/spelling-tester/kid-keep-trying.png" src="/spelling-tester/liam-keep-trying.png" style="max-width:90vw;" />
                 </div>
             </div>
         </div>
     </div>
 
     <script type="text/javascript" src="/spelling-tester/math/scripts.js"></script>
+    <script type="text/javascript" src="/spelling-tester/kid-scripts.js"></script>
     
   </body>
 </html>

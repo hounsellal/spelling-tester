@@ -7,6 +7,7 @@ var operationMap = {
 
 $( document ).ready(function() {
     $(".test-active").hide();
+
 });
 
 function getRandomInt(min, max) {

@@ -41,20 +41,23 @@
                       <span class="icon-bar"></span>
                       <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">Liam Learns</a>
+                    <a class="navbar-brand kid-link" data-href="/spelling-tester" href="/spelling-tester">Hounsell Learning</a>
                   </div>
               
                   <!-- Collect the nav links, forms, and other content for toggling -->
                   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                      <li class="active"><a href="/spelling-tester">Spelling <span class="sr-only">(current)</span></a></li>
-                      <li><a href="/spelling-tester/math">Math</a></li>
+                      <li class="active"><a class="kid-link" data-href="/spelling-tester" href="/spelling-tester">Spelling <span class="sr-only">(current)</span></a></li>
+                      <li><a class="kid-link" data-href="/spelling-tester/math" href="/spelling-tester/math">Math</a></li>
                     </ul>
-                    </div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="javascript:toggleKid()"><span class="glyphicon glyphicon-user"></span> Change Kid</a></li>
+                    </ul>
+                  </div>
                 </div>
             </nav>
 
-            <h1><img src="/spelling-tester/liam.png" style="width:50px;" /> Liam's Spelling Tester</h1>
+            <h1><img data-src="/spelling-tester/kid.png" class="kid-image" src="/spelling-tester/liam.png" style="width:50px;" /> <span class="kid-name">Liam</span>'s Spelling Tester</h1>
             
             <div class="form-group row storage-available test-inactive">
                 <div class="col-xs-7 col-sm-10">
@@ -114,13 +117,14 @@
         <div class="modal fade" id="keep-trying-modal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="">
-                    <img src="/spelling-tester/keep-trying.png" style="max-width:90vw;" />
+                    <img data-src="/spelling-tester/kid-keep-trying.png" class="kid-image" src="/spelling-tester/liam-keep-trying.png" style="max-width:90vw;" />
                 </div>
             </div>
         </div>
     </div>
 
     <script type="text/javascript" src="/spelling-tester/scripts.js"></script>
+    <script type="text/javascript" src="/spelling-tester/kid-scripts.js"></script>
     
   </body>
 </html>
