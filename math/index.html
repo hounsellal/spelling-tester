@@ -79,10 +79,10 @@
             <div class="form-group test-inactive">
                 <label for="operation">Operation</label>
                 <select class="form-control" id="operation">
-                    <option>Addition</option>
-                    <option>Subtraction</option>
-                    <option>Multiplication</option>
-                    <option>Division</option>
+                    <option value="addition">Addition</option>
+                    <option value="subtraction">Subtraction</option>
+                    <option value="multiplication" selected>Multiplication</option>
+                    <option value="division">Division</option>
                 </select>
             </div>
 
@@ -92,13 +92,15 @@
             </div>
 
             <div class="form-group test-inactive">
-                <label for="numbers">Numbers</label>
+                <label for="numbers">Total Numbers</label>
                 <input type="number" class="form-control" id="numbers" value="2" />
+                <p class="help-block">E.g. <u>3</u> x <u>3</u> has 2 numbers; <u>4</u> + <u>4</u> + <u>4</u> has 3 numbers.</p>
             </div>
 
             <div class="form-group test-inactive">
-                <label for="firstNumber">First Number</label>
-                <input type="number" class="form-control" id="firstNumber" value="" />
+                <label for="firstNumber">Guaranteed Number(s)</label>
+                <input type="text" class="form-control" id="firstNumber" value="" />
+                <p class="help-block">Separate by commas. For example, to study 5 and 7 times tables, enter "5,7" and every question will either have a 5 or a 7 as one of the numbers in the equation.</p>
             </div>
 
             <div class="form-group test-inactive">
@@ -139,7 +141,11 @@
                           
 
                 </div>
-                <div class="panel-footer">Type your answer, then press "Check".<br /><div id="inARow"></div></div>
+                <div class="panel-footer">
+                    Type your answer, then press "Check".<br />
+                    <div id="inARow"></div>
+                    <div id="mastered"></div>
+                </div>
             </div>
             
         </div>
@@ -158,6 +164,18 @@
                 <div class="">
                     <img class="kid-image" data-src="/spelling-tester/kid-keep-trying.png" src="/spelling-tester/liam-keep-trying.png" style="max-width:90vw;" />
                 </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="master-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h1>You have mastered all questions!</h1>
+                        <img class="kid-image" data-src="/spelling-tester/kid-winner.png" src="/spelling-tester/liam-winner.png" style="max-width:100%;" />
+                    </div>
+                </div>
+                    
             </div>
         </div>
     </div>

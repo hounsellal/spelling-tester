@@ -1,8 +1,8 @@
 var operationMap = {
-    "Addition": "+",
-    "Subtraction": "-",
-    "Multiplication": "×",
-    "Division": "÷"
+    "addition": "+",
+    "subtraction": "-",
+    "multiplication": "×",
+    "division": "÷"
 }
 
 $( document ).ready(function() {
@@ -15,6 +15,26 @@ function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function getRandomArrayValue(array){
+    return array[getRandomInt(0, array.length - 1)];
+}
+
+function factorialize(num) {
+    if (num < 0) 
+          return -1;
+    else if (num == 0) 
+        return 1;
+    else {
+        var x=1; 
+        var f=1;
+        while (x<=num) {
+            f*=x; 
+            x++;
+        }
+        return f;
+    }
 }
 
 function shuffle(array) {
@@ -38,6 +58,9 @@ function shuffle(array) {
 var operation = "";
 
 var inARow = 0;
+var masteredAnswers = {};
+var numberToMaster = 2;
+var possibleMastered;
 
 function startTest(){
     $("#answer").val('');
@@ -46,7 +69,23 @@ function startTest(){
     operation = $("#operation").val();
     var max = parseInt($("#max").val());
     var numbers = parseInt($("#numbers").val());
-    var firstNumber = parseInt($("#firstNumber").val());
+    var firstNumbers = $("#firstNumber").val();
+    var firstNumbersArray = firstNumbers ? firstNumbers.split(",").map(fN => {return parseInt(fN.trim())}) : [];
+    var n = max - 1; //we don't allow the number 1 since it's too easy so there are max - 1 possible numbers. E.g. if max is 3, then the possibilities are 3 and 2 (two possibilities)
+    var r = numbers; //there are this many "slots" in the equation
+    // for the number of combinations (since order doesn't matter for + and * and will only ever be ordered in one way for - and /, which is the same as order not mattering)
+    // where each number can be repeated, the equation is:
+    // (r + n - 1)! / r!(n - 1)! --> see https://www.mathsisfun.com/combinatorics/combinations-permutations.html
+    possibleMastered = factorialize(r + n - 1) / (factorialize(r) * factorialize(n - 1)); //this is how many combinations there are
+    if(firstNumbersArray.length) {
+        //if we are guaranteeing at least one number there are fewer combinations
+        //there are this many numbers that are NOT our guaranteed numbers:
+        var numbersOtherThanFirstNumbers = n - firstNumbersArray.length; 
+        //the below will give us all the combinations where NONE of our guaranteed numbers are included:
+        var combinationsWithNoFirstNumbers = factorialize(r + numbersOtherThanFirstNumbers - 1) / (factorialize(r) * factorialize(numbersOtherThanFirstNumbers - 1));
+        //we subtract the combinations which do not include any of the guaranteed numbers (since we must guarantee one or more of the numbers is present):
+        possibleMastered = possibleMastered - combinationsWithNoFirstNumbers;
+     } 
 
     $(".test-inactive").hide();
     $(".test-active").show();
@@ -56,18 +95,32 @@ function startTest(){
     for (let i = 0; i < numbers; i++) {
         let randomNumber = getRandomInt(2, max);
 
-        if(operation === "Division" && i === (numbers - 1) ){
+        if(operation === "division" && i === (numbers - 1) ){
             for(let num of numArray){
                 randomNumber = randomNumber * num;
             }
         } 
+
+        if(operation === "subtraction" && i === (numbers - 1) ){
+            for(let num of numArray){
+                randomNumber = randomNumber + num;
+            }
+        } 
         
-        if(i === 0 && firstNumber) randomNumber = firstNumber;
+        if(i === 0 && firstNumbers) randomNumber = getRandomArrayValue(firstNumbersArray);
+
         numArray.unshift(randomNumber);
+
     }
 
-    if(operation !== "Division"){
+    if(operation !== "division" && operation !== "subtraction"){
         shuffle(numArray);
+    }
+
+    let masteredAnswerKey = [...numArray].sort().join(",");
+
+    if(masteredAnswers[masteredAnswerKey] < 1 - numberToMaster) {
+        return startTest();
     }
     
     for (let i = 0; i < numbers; i++) {
@@ -83,6 +136,7 @@ function startTest(){
         }
         $("#math-test").append(newElement);
     }
+
     $("#answer").blur();
     $("#answer").focus();
 }
@@ -120,29 +174,29 @@ function check(){
     var numberObjects = [];
     $(".number-object").each(function(){
         var val = $(this).attr('data-number');
-        console.log(val);
         var num = parseInt(val);
         numberObjects.push(num);
     });
 
-    console.log(numberObjects);
+    let masteredAnswerKey = [...numberObjects].sort().join(","); //need to clone so we don't resort the objects [...]
+    if(!masteredAnswers[masteredAnswerKey]) masteredAnswers[masteredAnswerKey] = 0;
 
     var currentValue = numberObjects[0];
-    numberObjects.shift();
 
+    numberObjects.shift();
 
     for(let num of numberObjects){
         switch (operation) {
-            case "Addition":
+            case "addition":
                 currentValue = currentValue + num;
                 break;
-            case "Subtraction":
+            case "subtraction":
                 currentValue = currentValue - num;
                 break;
-            case "Multiplication":
+            case "multiplication":
                 currentValue = currentValue * num;
                 break;
-            case "Division":
+            case "division":
                 currentValue = currentValue/num;
                 break;
         }
@@ -151,13 +205,38 @@ function check(){
     if(answer !== currentValue) incorrect = true;
 
     if(!incorrect) {
-        $('#winner-modal').modal();
-        setTimeout(nextQuestion, 1500);
         inARow += 1;
-        $("#inARow").html(`You got <b>${inARow}</b> in a row!`);
+        $("#inARow").html(`You got ${inARow} in a row!`);
+        $("#answer").css('background-color', 'white');
+        masteredAnswers[masteredAnswerKey] -= 1;
     }
     else {
         $("#keep-trying-modal").modal();
+        setTimeout(function(){
+            $("#keep-trying-modal").modal('hide');
+            $("#answer").val('');
+            $("#answer").blur();
+            $("#answer").focus();
+        }, 1500);
         inARow = 0;
+        $("#inARow").html('');
+        $("#answer").css('background-color', '#dc3545');
+        masteredAnswers[masteredAnswerKey] += 3;
+    }
+    var quizzed = 0;
+    var mastered = 0;
+    for(answer in masteredAnswers){
+        quizzed += 1;
+        if (masteredAnswers[answer] < 1 - numberToMaster) mastered += 1;
+    }
+    $("#mastered").html(`You have been asked ${quizzed} different questions.<br />You have mastered ${mastered} out of ${possibleMastered} possible questions.`);
+
+    if(mastered  === possibleMastered) {
+        return $('#master-modal').modal();
+    }
+
+    if(!incorrect) {
+        $('#winner-modal').modal();
+        setTimeout(nextQuestion, 1000);
     }
 }
