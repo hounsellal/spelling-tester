@@ -59,7 +59,7 @@ var operation = "";
 
 var inARow = 0;
 var masteredAnswers = {};
-var numberToMaster = 2;
+var numberToMaster;
 var possibleMastered;
 
 function startTest(){
@@ -67,9 +67,11 @@ function startTest(){
     $("#math-test").html('');
 
     operation = $("#operation").val();
-    var max = parseInt($("#max").val());
-    var numbers = parseInt($("#numbers").val());
+    var max = parseInt($("#max").val()) || 12;
+    var numbers = parseInt($("#numbers").val()) || 2;
     var firstNumbers = $("#firstNumber").val();
+    var masterCorrect = parseInt($("#masterCorrect").val());
+    numberToMaster = masterCorrect || 2;
     var firstNumbersArray = firstNumbers ? firstNumbers.split(",").map(fN => {return parseInt(fN.trim())}) : [];
     var n = max - 1; //we don't allow the number 1 since it's too easy so there are max - 1 possible numbers. E.g. if max is 3, then the possibilities are 3 and 2 (two possibilities)
     var r = numbers; //there are this many "slots" in the equation
@@ -221,7 +223,7 @@ function check(){
         inARow = 0;
         $("#inARow").html('');
         $("#answer").css('background-color', '#dc3545');
-        masteredAnswers[masteredAnswerKey] += 3;
+        masteredAnswers[masteredAnswerKey] += numberToMaster;
     }
     var quizzed = 0;
     var mastered = 0;
