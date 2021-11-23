@@ -1,0 +1,36 @@
+extends ./layout.jade
+
+block variables 
+    - var active_page = "spelling"
+
+block content 
+    h1
+        img.kid-image(data-src='/spelling-tester/kid.png' src='/spelling-tester/liam.png' style='width:50px;')
+        span.kid-name Liam
+        | 's Spelling Tester
+    .form-group.row.storage-available.test-inactive
+        .col-xs-7.col-sm-10
+            label(for='existing-lists') Load List
+            select#existing-lists.form-control(onchange='loadList()')
+                option(value='')
+        .col-xs-5.col-sm-2
+            button.btn.btn-danger(style='margin-top:25px;' onclick='deleteList()') Delete
+    .form-group.test-inactive
+        label(for='list') Word List
+        textarea#list.form-control(style='font-size:16px;' rows='14' autocorrect='off' autocapitalize='none')
+        p.help-block
+        | Add one spelling word per line. You can save your list by naming it below and clicking Save List. For words with similar sounds you can use a semi-colon for an explanation: e.g. "hear; as in 'I can hear you.'"
+    .test-active.panel.panel-primary(style='margin-top:25px;display:none;')
+        .panel-heading
+            h3.panel-title Quiz
+        #word-test.panel-body
+            .panel-footer Press "Speak" for each question. Then type your answer.
+    .form-group.row
+        .col-xs-6(style='padding:15px;')
+            button.btn.btn-primary.test-active.btn-lg(style='width:100%;' onclick='check();') Check
+            button.btn.btn-success.btn-lg.test-inactive(style='width:100%;' onclick='buildList()') Take Test
+        .col-xs-6.text-right
+            .col-12.p-3.form-inline.text-right(style='padding:15px;')
+                input#list-name.form-control.storage-available.test-inactive(style='margin-bottom:10px;font-size:16px;' type='text')
+                button.btn.btn-default.storage-available.test-inactive(style='margin-bottom:10px;' onclick='saveList()') Save List
+                button.btn.btn-danger.test-active.btn-lg(style='width:100%;' onclick='finishTest()') End Test

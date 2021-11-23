@@ -1,0 +1,75 @@
+extends ../layout.jade
+
+block variables
+    - var active_page = "math"
+
+block content
+    h1
+        img.kid-image(data-src='/spelling-tester/kid.png' src='/spelling-tester/liam.png' style='width:50px;')
+        span.kid-name Liam
+        | 's Math Tester
+    .row
+        .col-sm-6.col-xs-12
+            .form-group.test-inactive
+                label(for='operation') Operation
+                select#operation.form-control
+                    option(value='addition') Addition
+                    option(value='subtraction') Subtraction
+                    option(value='multiplication' selected='') Multiplication
+                    option(value='division') Division
+        .col-sm-6.col-xs-12
+            .form-group.test-inactive
+                label(for='max') Highest Number
+                input#max.form-control(type='number' value='12')
+    .row
+        .col-sm-6.col-xs-12
+            .form-group.test-inactive
+                label(for='numbers') Total Numbers
+                input#numbers.form-control(type='number' value='2')
+                p.help-block
+                    | E.g. 
+                    u 3
+                    |  x 
+                    u 3
+                    |  has 2 numbers; 
+                    u 4
+                    |  + 
+                    u 4
+                    |  + 
+                    u 4
+                    |  has 3 numbers.
+        .col-sm-6.col-xs-12
+            .form-group.test-inactive
+                label(for='firstNumber') Guaranteed Number(s)
+                input#firstNumber.form-control(type='text' value='')
+                p.help-block
+                | Separate by commas. For example, to study 5 and 7 times tables, enter "5,7" and every question will either have a 5 or a 7 as one of the numbers in the equation.
+    .row
+        .col-sm-6.col-xs-12
+            .form-group.test-inactive
+                label(for='masterCorrect') Mastery Level
+                input#masterCorrect.form-control(type='text' value='2')
+                p.help-block
+                | How many times must you get a question right to master it? If you get it wrong, you must get it right this many times more.
+        .col-sm-6.col-xs-12
+    .form-group.test-inactive(style='text-align:right;')
+        button.btn.btn-primary.btn-lg(onclick='startTest()') Start Quiz
+    .test-active.panel.panel-primary
+        .panel-heading
+            h3.panel-title Quiz
+        .panel-body
+            #math-test
+            .clear
+            .row
+                .col-xs-8(style='margin-left:-2vw;')
+                    .form-group
+                        input#answer.form-control(type='number' style='font-size:8vw;font-weight:bold;height:8vw;text-align:right;' onkeyup='finishedAnswer(event, this);')
+                .col-xs-2
+                    button.btn.btn-primary(style='min-width:100%;height:10vw;font-size:2vw;' onclick='check()') Check
+            .row
+                .col-xs-12.p-5
+                    button.btn.btn-danger.btn-lg(style='min-width:100%; margin-top:2em;' onclick='finishTest()') End Test
+        .panel-footer Type your answer, then press "Check".
+            br
+            #inARow
+            #mastered
