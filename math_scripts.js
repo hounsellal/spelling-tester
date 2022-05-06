@@ -143,10 +143,10 @@ function startTest(){
     $("#answer").blur();
     $("#answer").focus();
 
-    //give 2 minutes to answer
+    //give 1 minute to answer
     answerTimeout = setTimeout(function(){
         check();
-    }, 1000 * 60 * 2);
+    }, 1000 * 60 * 1);
 }
 
 function finishedAnswer(event){
