@@ -141,6 +141,11 @@ function startTest(){
 
     $("#answer").blur();
     $("#answer").focus();
+
+    //give 2 minutes to answer
+    setTimeout(function(){
+        check();
+    }, 1000 * 60 * 2);
 }
 
 function finishedAnswer(event){
@@ -180,7 +185,7 @@ function check(){
         numberObjects.push(num);
     });
 
-    let masteredAnswerKey = [...numberObjects].sort().join(","); //need to clone so we don't resort the objects [...]
+    let masteredAnswerKey = [...numberObjects].sort().join(","); //need to clone so we don't re-sort the objects [...]
     if(!masteredAnswers[masteredAnswerKey]) masteredAnswers[masteredAnswerKey] = 0;
 
     var currentValue = numberObjects[0];
@@ -213,13 +218,9 @@ function check(){
         masteredAnswers[masteredAnswerKey] -= 1;
     }
     else {
+        $("#math-correct-answer").html($("#math-test").text() + " = " + currentValue);
+        $("#math-correct-answer").show();
         $("#keep-trying-modal").modal();
-        setTimeout(function(){
-            $("#keep-trying-modal").modal('hide');
-            $("#answer").val('');
-            $("#answer").blur();
-            $("#answer").focus();
-        }, 1500);
         inARow = 0;
         $("#inARow").html('');
         $("#answer").css('background-color', '#dc3545');
@@ -231,7 +232,7 @@ function check(){
         quizzed += 1;
         if (masteredAnswers[answer] < 1 - numberToMaster) mastered += 1;
     }
-    $("#mastered").html(`You have been asked ${quizzed} different questions.<br />You have mastered ${mastered} out of ${possibleMastered} possible questions.`);
+    $("#mastered").html(`You have been asked ${quizzed} ${quizzed > 1 ? "different questions" : "question"}.<br />You have mastered ${mastered} out of ${possibleMastered} possible questions.`);
 
     if(mastered  === possibleMastered) {
         return $('#master-modal').modal();
@@ -242,3 +243,13 @@ function check(){
         setTimeout(nextQuestion, 1000);
     }
 }
+
+$('#keep-trying-modal').on('hidden.bs.modal', function () {
+        
+    $("#answer").val('');
+    $("#answer").blur();
+    $("#answer").focus();
+    $("#answer").css('background-color', 'white');
+    nextQuestion();
+
+})

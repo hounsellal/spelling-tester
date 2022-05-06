@@ -35,6 +35,16 @@ html(lang='en')
       padding: .005em;
       float:left;
       }
+      #math-correct-answer {
+        font-size:7vw;
+        font-weight:bold;
+        border-radius: .05em;
+        padding: .005em;
+        display:none;
+        text-align:center;
+        background-color:white;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      }
   body.plain
     #container(style='max-width:100vw;')
       .container
@@ -71,6 +81,7 @@ html(lang='en')
         .modal-dialog.modal-dialog-centered(role='document')
           div
             img.kid-image(data-src='/spelling-tester/kid-keep-trying.png' src='/spelling-tester/liam-keep-trying.png' style='max-width:90vw;')
+          #math-correct-answer
       #master-modal.modal.fade(tabindex='-1' role='dialog' aria-hidden='true')
         .modal-dialog.modal-dialog-centered(role='document')
             .modal-content
