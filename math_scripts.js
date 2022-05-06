@@ -61,6 +61,7 @@ var inARow = 0;
 var masteredAnswers = {};
 var numberToMaster;
 var possibleMastered;
+var answerTimeout;
 
 function startTest(){
     $("#answer").val('');
@@ -143,7 +144,7 @@ function startTest(){
     $("#answer").focus();
 
     //give 2 minutes to answer
-    setTimeout(function(){
+    answerTimeout = setTimeout(function(){
         check();
     }, 1000 * 60 * 2);
 }
@@ -174,6 +175,9 @@ function nextQuestion(){
 }
 
 function check(){
+
+    clearTimeout(answerTimeout);
+
     var incorrect = false;
 
     var answer = Number($("#answer").val());
